@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Webhooks SURI</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="webchat.js">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Painel de Webhooks SURI</h1>
+            <div class="status">
+                <span id="status-indicator" class="status-indicator">●</span>
+                <span id="status-text">Conectando...</span>
+                <button id="refresh-btn">Atualizar</button>
+            </div>
+        </header>
+
+        <div class="info-panel">
+            <div class="info-card">
+                <h3>Endpoint para Webhooks</h3>
+                <code id="webhook-url">Carregando...</code>
+                <button id="copy-btn">Copiar URL</button>
+            </div>
+            <div class="info-card">
+                <h3>Total de Webhooks Recebidos</h3>
+                <p id="total-count">0</p>
+            </div>
+            <div class="info-card">
+                <h3>Último Webhook</h3>
+                <p id="last-received">Nenhum ainda</p>
+            </div>
+        </div>
+
+        <div class="filters">
+            <input type="text" id="search-input" placeholder="Buscar webhooks...">
+            <select id="type-filter">
+                <option value="">Todos os tipos</option>
+                <option value="form_submission">Submissão de Formulário</option>
+                <option value="payment_received">Pagamento Recebido</option>
+                <option value="subscription">Assinatura</option>
+                <option value="test">Teste</option>
+            </select>
+            <button id="test-btn">Enviar Webhook de Teste</button>
+        </div>
+
+        <div class="webhooks-list">
+            <h2>Webhooks Recebidos</h2>
+            <div id="webhooks-container">
+                <p class="empty-state">Nenhum webhook recebido ainda.</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="webchat.js"></script>
+</body>
+
+</html>

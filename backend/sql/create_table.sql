@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS webhooks (
+id SERIAL PRIMARY KEY,
+received_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
+payload JSONB
+);
