@@ -1,13 +1,13 @@
 {
-    "name": "suri-webhooks",
-    "version": "1.0.0",
-    "main": "index.js",
-    "type": "module",
-    "scripts": {
-        "dev": "vercel dev",
-        "start": "node api/webhook.js"
-    },
-    "dependencies": {
-        "pg": "^8.11.3"
-    }
+  "name": "suri-webhooks",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "vercel dev",
+    "start": "node api/webhook.js"
+  },
+  "dependencies": {
+    "pg": "^8.11.3"
+  }
 }
