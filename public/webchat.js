@@ -14,3 +14,9 @@ window.cbAsyncInit = function () {
     js.src = "https://webchat.chatbotmaker.io/cbm-jssdk.js";
     fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'cbm-jssdk'));
+
+// CREATE TABLE IF NOT EXISTS webhooks (
+//   id SERIAL PRIMARY KEY,
+//   payload JSONB NOT NULL,
+//   received_at TIMESTAMP DEFAULT NOW()
+// );
