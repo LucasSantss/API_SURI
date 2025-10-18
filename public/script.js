@@ -92,7 +92,7 @@ function renderWebhooks() {
   if (!document.getElementById("delete-all-btn")) {
     const deleteBtn = document.createElement("button");
     deleteBtn.id = "delete-all-btn";
-    deleteBtn.textContent = "Apagar todos os webhooks";
+    deleteBtn.textContent = "Apagar todos os Resultados";
     deleteBtn.style.backgroundColor = "#d9534f";
     deleteBtn.style.color = "#fff";
     deleteBtn.style.border = "none";
@@ -102,9 +102,9 @@ function renderWebhooks() {
     deleteBtn.style.display = "block";
     deleteBtn.style.cursor = "pointer";
     deleteBtn.addEventListener("click", async () => {
-      if (!confirm("Tem certeza que deseja apagar TODOS os webhooks?")) return;
+      if (!confirm("Tem certeza que deseja apagar TODOS os Resultados?")) return;
       try {
-        const res = await fetch(backendURL + "/webhooks", { method: "DELETE" });
+        const res = await fetch(backendURL + "/Resultados", { method: "DELETE" });
         if (!res.ok) throw new Error('Falha ao deletar: ' + res.status);
         await fetchWebhooks();
       } catch (err) {
@@ -131,12 +131,12 @@ testBtn.addEventListener("click", async () => {
     const res = await fetch(webhookEndpoint, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ type: "test", message: "Webhook de teste enviado pelo painel" })
+      body: JSON.stringify({ type: "test", message: "Dados de teste enviado pelo painel" })
     });
     if (!res.ok) throw new Error('HTTP ' + res.status);
     await fetchWebhooks();
   } catch (err) {
-    alert("Erro ao enviar webhook de teste: " + err.message);
+    alert("Erro ao enviar Dados de teste: " + err.message);
   }
 });
 

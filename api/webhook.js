@@ -10,16 +10,16 @@ export default async function handler(req, res) {
                 [payload]
             );
 
-            res.status(200).json({ success: true, message: "Webhook salvo" });
+            res.status(200).json({ success: true, message: "Dados salvo" });
         } catch (err) {
-            console.error("Erro ao salvar webhook:", err);
+            console.error("Erro ao salvar Dados:", err);
             res.status(500).json({ error: "Erro interno" });
         }
     }
 
     else if (req.method === "GET") {
         // Apenas teste / healthcheck
-        res.status(200).json({ success: true, message: "Webhook endpoint ativo" });
+        res.status(200).json({ success: true, message: "API-SURI endpoint ativo" });
     }
 
     else {
