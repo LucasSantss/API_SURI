@@ -28,7 +28,7 @@ function setStatus(state, text) {
 async function fetchWebhooks() {
   setStatus("connecting", "Conectando...");
   try {
-    const res = await fetch(backendURL + "/webhooks", { method: "GET", credentials: "omit" });
+    const res = await fetch(backendURL + "/results", { method: "GET", credentials: "omit" });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     webhooks = await res.json();
     renderWebhooks();
