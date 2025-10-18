@@ -56,7 +56,7 @@ function renderWebhooks() {
   lastReceivedEl.textContent = filtered[0] ? new Date(filtered[0].received_at).toLocaleString() : "Nenhum ainda";
 
   if (filtered.length === 0) {
-    webhooksContainer.innerHTML = '<p class="empty-state">Nenhum webhook recebido ainda.</p>';
+    webhooksContainer.innerHTML = '<p class="empty-state">Nenhum resultado recebido ainda.</p>';
     return;
   }
 
