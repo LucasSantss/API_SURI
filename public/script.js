@@ -2,13 +2,13 @@
 // If you deploy frontend and backend together on the same Vercel project, leave backendURL as window.location.origin.
 // If backend is in a different project, replace backendURL with your backend origin (e.g. "https://seu-backend.vercel.app").
 const backendURL = window.location.origin;
-const webhookEndpoint = backendURL + "/results";
+const webhookEndpoint = backendURL + "/webhook";
 
 const statusText = document.getElementById("status-text");
 const statusIndicator = document.getElementById("status-indicator");
 const refreshBtn = document.getElementById("refresh-btn");
 const copyBtn = document.getElementById("copy-btn");
-const webhookUrlEl = document.getElementById("results-url");
+const webhookUrlEl = document.getElementById("webhook-url");
 const totalCountEl = document.getElementById("total-count");
 const lastReceivedEl = document.getElementById("last-received");
 const searchInput = document.getElementById("search-input");
@@ -104,7 +104,7 @@ function renderWebhooks() {
     deleteBtn.addEventListener("click", async () => {
       if (!confirm("Tem certeza que deseja apagar TODOS os Resultados?")) return;
       try {
-        const res = await fetch(backendURL + "/Resultados", { method: "DELETE" });
+        const res = await fetch(backendURL + "/webhooks", { method: "DELETE" });
         if (!res.ok) throw new Error('Falha ao deletar: ' + res.status);
         await fetchWebhooks();
       } catch (err) {
