@@ -2,7 +2,7 @@
 // If you deploy frontend and backend together on the same Vercel project, leave backendURL as window.location.origin.
 // If backend is in a different project, replace backendURL with your backend origin (e.g. "https://seu-backend.vercel.app").
 const backendURL = window.location.origin;
-const webhookEndpoint = backendURL + "/results";
+const webhookEndpoint = backendURL + "/webhook";
 
 const statusText = document.getElementById("status-text");
 const statusIndicator = document.getElementById("status-indicator");
@@ -28,7 +28,7 @@ function setStatus(state, text) {
 async function fetchWebhooks() {
   setStatus("connecting", "Conectando...");
   try {
-    const res = await fetch(backendURL + "/results", { method: "GET", credentials: "omit" });
+    const res = await fetch(backendURL + "/webhooks", { method: "GET", credentials: "omit" });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     webhooks = await res.json();
     renderWebhooks();
