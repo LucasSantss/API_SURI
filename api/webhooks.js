@@ -19,7 +19,7 @@ export default async function handler(req, res) {
       return res.status(200).json(result.rows);
     } catch (err) {
       console.error("Erro ao buscar Resultados:", err);
-      return res.status(500).json({ error: "Erro interno" });
+      return res.status(500).json({ success: false, message: "Erro ao buscar resultados" });
     }
   } else if (req.method === "DELETE") {
     try {
@@ -27,7 +27,7 @@ export default async function handler(req, res) {
       return res.status(200).json({ success: true, message: "Todos os resultados foram apagados" });
     } catch (err) {
       console.error("Erro ao deletar Resultados:", err);
-      return res.status(500).json({ success: false, message: "Erro interno" });
+      return res.status(500).json({ error: "Erro interno" });
     }
   } else {
     res.setHeader("Allow", ["GET", "DELETE", "OPTIONS"]);
