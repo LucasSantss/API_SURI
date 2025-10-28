@@ -13,7 +13,7 @@ export default async function handler(req, res) {
             res.status(200).json({ success: true, message: "Dados salvo" });
         } catch (err) {
             console.error("Erro ao salvar Dados:", err);
-            res.status(500).json({ error: "Erro interno" });
+            res.status(500).json({ success: false, message: "Erro interno" });
         }
     }
 
