@@ -10,7 +10,7 @@ export default async function handler(req, res) {
                 [payload]
             );
 
-            res.status(200).json({ success: true, message: "Dados salvo" });
+            res.status(200).json({ success: true, message: "Dados salvo", type: payload.type });
         } catch (err) {
             console.error("Erro ao salvar Dados:", err);
             res.status(500).json({ success: false, message: "Erro interno" });
