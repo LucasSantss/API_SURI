@@ -131,7 +131,7 @@ testBtn.addEventListener("click", async () => {
     const res = await fetch(webhookEndpoint, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ type: "test", message: "Dados de teste enviado pelo painel" })
+      body: JSON.stringify({ type: "teste", message: "Dados de teste enviado pelo painel" })
     });
     if (!res.ok) throw new Error('HTTP ' + res.status);
     await fetchWebhooks();
