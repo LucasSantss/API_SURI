@@ -1,4 +1,5 @@
 import pool from "./db.js";
+import { initDatabase } from "./init-db.js";
 
 export default async function handler(req, res) {
     // CORS headers
@@ -11,19 +12,8 @@ export default async function handler(req, res) {
         return res.status(204).end();
     }
 
-    // Tentar criar a tabela se não existir (inicialização simplificada)
-    try {
-        await pool.query(`
-            CREATE TABLE IF NOT EXISTS api_config (
-                id SERIAL PRIMARY KEY,
-                status INTEGER DEFAULT 200,
-                body JSONB DEFAULT '{"success": true}'::jsonb,
-                updated_at TIMESTAMP DEFAULT NOW()
-            )
-        `);
-    } catch (e) {
-        console.error("Erro ao garantir tabela api_config:", e);
-    }
+    // Garantir que as tabelas existem
+    await initDatabase().catch(console.error);
 
     if (req.method === "GET") {
         try {

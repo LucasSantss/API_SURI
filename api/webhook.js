@@ -1,6 +1,10 @@
 import pool from "./db.js";
+import { initDatabase } from "./init-db.js";
 
 export default async function handler(req, res) {
+    // Garantir que as tabelas existem
+    await initDatabase().catch(console.error);
+
     if (req.method === "POST") {
         try {
             const payload = req.body;

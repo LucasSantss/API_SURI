@@ -1,4 +1,5 @@
 import pool from "./db.js";
+import { initDatabase } from "./init-db.js";
 
 export default async function handler(req, res) {
     const origin = req.headers.origin || '*';
@@ -8,20 +9,8 @@ export default async function handler(req, res) {
 
     if (req.method === 'OPTIONS') return res.status(204).end();
 
-    // Inicialização da tabela
-    try {
-        await pool.query(`
-            CREATE TABLE IF NOT EXISTS authorized_documents (
-                id SERIAL PRIMARY KEY,
-                doc_type VARCHAR(10), -- 'CPF' ou 'CNPJ'
-                doc_value VARCHAR(20) UNIQUE,
-                custom_response JSONB,
-                created_at TIMESTAMP DEFAULT NOW()
-            )
-        `);
-    } catch (e) {
-        console.error("Erro ao criar tabela authorized_documents:", e);
-    }
+    // Garantir que as tabelas existem
+    await initDatabase().catch(console.error);
 
     if (req.method === "GET") {
         try {
