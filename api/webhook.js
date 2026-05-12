@@ -10,7 +10,21 @@ export default async function handler(req, res) {
                 [payload]
             );
 
-            res.status(200).json({ success: true, message: "Dados salvo", type: payload.type });
+            // Buscar configuração de retorno customizada
+            let responseStatus = 200;
+            let responseBody = { success: true, message: "Dados salvo", type: payload.type };
+
+            try {
+                const configResult = await pool.query("SELECT status, body FROM api_config ORDER BY id DESC LIMIT 1");
+                if (configResult.rows.length > 0) {
+                    responseStatus = configResult.rows[0].status;
+                    responseBody = configResult.rows[0].body;
+                }
+            } catch (configErr) {
+                console.warn("Usando retorno padrão devido a erro na config:", configErr.message);
+            }
+
+            res.status(responseStatus).json(responseBody);
         } catch (err) {
             console.error("Erro ao salvar Dados:", err);
             res.status(500).json({ success: false, message: "Erro interno" });

@@ -16,7 +16,56 @@ const typeFilter = document.getElementById("type-filter");
 const testBtn = document.getElementById("test-btn");
 const webhooksContainer = document.getElementById("webhooks-container");
 
+// Novos elementos
+const responseStatusInput = document.getElementById("response-status");
+const responseBodyInput = document.getElementById("response-body");
+const saveConfigBtn = document.getElementById("save-config-btn");
+
+const cpfInput = document.getElementById("cpf-input");
+const validateCpfBtn = document.getElementById("validate-cpf-btn");
+const cpfResult = document.getElementById("cpf-result");
+
+const cnpjInput = document.getElementById("cnpj-input");
+const validateCnpjBtn = document.getElementById("validate-cnpj-btn");
+const cnpjResult = document.getElementById("cnpj-result");
+
 let webhooks = [];
+
+// Funções de Validação
+function isValidCPF(cpf) {
+    cpf = cpf.replace(/[^\d]+/g, '');
+    if (cpf.length !== 11 || !!cpf.match(/(\d)\1{10}/)) return false;
+    let cpfs = cpf.split('').map(el => +el);
+    const rest = (count) => (cpfs.slice(0, count - 12).reduce((soma, el, index) => soma + el * (count - index), 0) * 10) % 11 % 10;
+    return rest(10) === cpfs[9] && rest(11) === cpfs[10];
+}
+
+function isValidCNPJ(cnpj) {
+    cnpj = cnpj.replace(/[^\d]+/g, '');
+    if (cnpj.length !== 14 || !!cnpj.match(/(\d)\1{13}/)) return false;
+    let length = cnpj.length - 2;
+    let numbers = cnpj.substring(0, length);
+    let digits = cnpj.substring(length);
+    let sum = 0;
+    let pos = length - 7;
+    for (let i = length; i >= 1; i--) {
+        sum += numbers.charAt(length - i) * pos--;
+        if (pos < 2) pos = 9;
+    }
+    let result = sum % 11 < 2 ? 0 : 11 - (sum % 11);
+    if (result != digits.charAt(0)) return false;
+    length = length + 1;
+    numbers = cnpj.substring(0, length);
+    sum = 0;
+    pos = length - 7;
+    for (let i = length; i >= 1; i--) {
+        sum += numbers.charAt(length - i) * pos--;
+        if (pos < 2) pos = 9;
+    }
+    result = sum % 11 < 2 ? 0 : 11 - (sum % 11);
+    if (result != digits.charAt(1)) return false;
+    return true;
+}
 
 function setStatus(state, text) {
   const statusEl = document.querySelector(".status");
@@ -140,6 +189,84 @@ testBtn.addEventListener("click", async () => {
   }
 });
 
+// Event Listeners para Configuração e Validação
+saveConfigBtn.addEventListener("click", async () => {
+    const status = parseInt(responseStatusInput.value);
+    let body;
+    try {
+        body = JSON.parse(responseBodyInput.value);
+    } catch (e) {
+        alert("Erro no JSON: " + e.message);
+        return;
+    }
+
+    saveConfigBtn.disabled = true;
+    saveConfigBtn.textContent = "Salvando...";
+
+    try {
+        const res = await fetch(backendURL + "/api/config", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ status, body })
+        });
+        if (!res.ok) throw new Error("Erro ao salvar configuração");
+        alert("Configuração salva com sucesso!");
+    } catch (err) {
+        alert("Erro: " + err.message);
+    } finally {
+        saveConfigBtn.disabled = false;
+        saveConfigBtn.textContent = "Salvar Configuração";
+    }
+});
+
+async function loadConfig() {
+    try {
+        const res = await fetch(backendURL + "/api/config");
+        if (res.ok) {
+            const config = await res.json();
+            if (config) {
+                responseStatusInput.value = config.status || 200;
+                responseBodyInput.value = JSON.stringify(config.body || {}, null, 2);
+            }
+        }
+    } catch (err) {
+        console.error("Erro ao carregar config:", err);
+    }
+}
+
+validateCpfBtn.addEventListener("click", () => {
+    const val = cpfInput.value.trim();
+    if (!val) {
+        cpfResult.textContent = "Digite um CPF";
+        cpfResult.className = "result-msg error";
+        return;
+    }
+    if (isValidCPF(val)) {
+        cpfResult.textContent = "CPF Válido!";
+        cpfResult.className = "result-msg success";
+    } else {
+        cpfResult.textContent = "CPF Inválido!";
+        cpfResult.className = "result-msg error";
+    }
+});
+
+validateCnpjBtn.addEventListener("click", () => {
+    const val = cnpjInput.value.trim();
+    if (!val) {
+        cnpjResult.textContent = "Digite um CNPJ";
+        cnpjResult.className = "result-msg error";
+        return;
+    }
+    if (isValidCNPJ(val)) {
+        cnpjResult.textContent = "CNPJ Válido!";
+        cnpjResult.className = "result-msg success";
+    } else {
+        cnpjResult.textContent = "CNPJ Inválido!";
+        cnpjResult.className = "result-msg error";
+    }
+});
+
 webhookUrlEl.textContent = webhookEndpoint;
 fetchWebhooks();
+loadConfig();
 setInterval(() => { if (document.hasFocus()) fetchWebhooks(); }, 5000);

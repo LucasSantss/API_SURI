@@ -35,6 +35,39 @@
             </div>
         </div>
 
+        <section class="config-section">
+            <h2>Simulador de Retorno da API</h2>
+            <div class="config-grid">
+                <div class="config-card">
+                    <h3>Status Code</h3>
+                    <input type="number" id="response-status" value="200" placeholder="Ex: 200, 400, 500">
+                </div>
+                <div class="config-card">
+                    <h3>Corpo da Resposta (JSON)</h3>
+                    <textarea id="response-body" rows="5" placeholder='{"success": true, "message": "Ok"}'>{"success": true, "message": "Dados salvo"}</textarea>
+                </div>
+            </div>
+            <button id="save-config-btn" class="primary-btn">Salvar Configuração</button>
+        </section>
+
+        <section class="validation-section">
+            <h2>Validador de Documentos</h2>
+            <div class="validation-grid">
+                <div class="validation-card">
+                    <h3>Validar CPF</h3>
+                    <input type="text" id="cpf-input" placeholder="000.000.000-00">
+                    <button id="validate-cpf-btn">Validar CPF</button>
+                    <p id="cpf-result" class="result-msg"></p>
+                </div>
+                <div class="validation-card">
+                    <h3>Validar CNPJ</h3>
+                    <input type="text" id="cnpj-input" placeholder="00.000.000/0000-00">
+                    <button id="validate-cnpj-btn">Validar CNPJ</button>
+                    <p id="cnpj-result" class="result-msg"></p>
+                </div>
+            </div>
+        </section>
+
         <div class="filters">
             <input type="text" id="search-input" placeholder="Buscar Resultados...">
             <select id="type-filter">
