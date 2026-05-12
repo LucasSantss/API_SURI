@@ -207,7 +207,7 @@ button:disabled {
 }
 
 /* Novas seções */
-.config-section, .validation-section {
+.config-section, .docs-management-section {
     background-color: white;
     padding: 20px;
     border-radius: 8px;
@@ -215,7 +215,7 @@ button:disabled {
     margin-bottom: 30px;
 }
 
-.config-section h2, .validation-section h2 {
+.config-section h2, .docs-management-section h2 {
     margin-bottom: 20px;
     color: #2c3e50;
     font-size: 20px;
@@ -224,38 +224,72 @@ button:disabled {
     display: inline-block;
 }
 
-.config-grid, .validation-grid {
+.config-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 20px;
     margin-bottom: 20px;
 }
 
-.config-card, .validation-card {
+.config-card {
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
 
-.config-card h3, .validation-card h3 {
+.config-card h3 {
     font-size: 14px;
     color: #7f8c8d;
 }
 
-#response-status, #cpf-input, #cnpj-input {
+#response-status, #doc-value, #doc-type {
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 4px;
     font-size: 16px;
 }
 
-#response-body {
+#response-body, #doc-response {
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 4px;
     font-family: 'Courier New', Courier, monospace;
     font-size: 14px;
     resize: vertical;
+}
+
+.docs-list-container {
+    margin-top: 30px;
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+}
+
+.docs-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.docs-table th, .docs-table td {
+    text-align: left;
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+}
+
+.docs-table th {
+    background-color: #f8f9fa;
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.btn-delete {
+    background-color: #e74c3c;
+    padding: 5px 10px;
+    font-size: 12px;
+}
+
+.btn-delete:hover {
+    background-color: #c0392b;
 }
 
 .primary-btn {

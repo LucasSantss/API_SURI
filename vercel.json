@@ -8,6 +8,7 @@
     { "src": "/webhook", "dest": "/api/webhook.js" },
     { "src": "/webhooks", "dest": "/api/webhooks.js" },
     { "src": "/api/config", "dest": "/api/config.js" },
+    { "src": "/api/documents", "dest": "/api/documents.js" },
     { "src": "/(.*)", "dest": "/public/$1" }
   ]
 }

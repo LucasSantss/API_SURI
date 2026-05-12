@@ -21,17 +21,16 @@ const responseStatusInput = document.getElementById("response-status");
 const responseBodyInput = document.getElementById("response-body");
 const saveConfigBtn = document.getElementById("save-config-btn");
 
-const cpfInput = document.getElementById("cpf-input");
-const validateCpfBtn = document.getElementById("validate-cpf-btn");
-const cpfResult = document.getElementById("cpf-result");
-
-const cnpjInput = document.getElementById("cnpj-input");
-const validateCnpjBtn = document.getElementById("validate-cnpj-btn");
-const cnpjResult = document.getElementById("cnpj-result");
+const docTypeSelect = document.getElementById("doc-type");
+const docValueInput = document.getElementById("doc-value");
+const docResponseInput = document.getElementById("doc-response");
+const addDocBtn = document.getElementById("add-doc-btn");
+const docsListBody = document.getElementById("docs-list-body");
 
 let webhooks = [];
+let authorizedDocs = [];
 
-// Funções de Validação
+// Funções de Validação (Mantidas se necessário no futuro, mas não usadas agora)
 function isValidCPF(cpf) {
     cpf = cpf.replace(/[^\d]+/g, '');
     if (cpf.length !== 11 || !!cpf.match(/(\d)\1{10}/)) return false;
@@ -234,39 +233,77 @@ async function loadConfig() {
     }
 }
 
-validateCpfBtn.addEventListener("click", () => {
-    const val = cpfInput.value.trim();
-    if (!val) {
-        cpfResult.textContent = "Digite um CPF";
-        cpfResult.className = "result-msg error";
-        return;
+// Gerenciamento de Documentos
+async function fetchDocs() {
+    try {
+        const res = await fetch(backendURL + "/api/documents");
+        if (!res.ok) throw new Error("Erro ao buscar documentos");
+        authorizedDocs = await res.json();
+        renderDocs();
+    } catch (err) {
+        console.error("fetchDocs error:", err);
     }
-    if (isValidCPF(val)) {
-        cpfResult.textContent = "CPF Válido!";
-        cpfResult.className = "result-msg success";
-    } else {
-        cpfResult.textContent = "CPF Inválido!";
-        cpfResult.className = "result-msg error";
-    }
-});
+}
 
-validateCnpjBtn.addEventListener("click", () => {
-    const val = cnpjInput.value.trim();
-    if (!val) {
-        cnpjResult.textContent = "Digite um CNPJ";
-        cnpjResult.className = "result-msg error";
-        return;
+function renderDocs() {
+    docsListBody.innerHTML = "";
+    authorizedDocs.forEach(doc => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td>${doc.doc_type}</td>
+            <td>${doc.doc_value}</td>
+            <td><pre style="font-size: 10px">${JSON.stringify(doc.custom_response, null, 2)}</pre></td>
+            <td>
+                <button class="btn-delete" onclick="deleteDoc(${doc.id})">Excluir</button>
+            </td>
+        `;
+        docsListBody.appendChild(tr);
+    });
+}
+
+window.deleteDoc = async (id) => {
+    if (!confirm("Excluir este documento?")) return;
+    try {
+        const res = await fetch(`${backendURL}/api/documents?id=${id}`, { method: "DELETE" });
+        if (!res.ok) throw new Error("Erro ao deletar");
+        fetchDocs();
+    } catch (err) {
+        alert(err.message);
     }
-    if (isValidCNPJ(val)) {
-        cnpjResult.textContent = "CNPJ Válido!";
-        cnpjResult.className = "result-msg success";
-    } else {
-        cnpjResult.textContent = "CNPJ Inválido!";
-        cnpjResult.className = "result-msg error";
+};
+
+addDocBtn.addEventListener("click", async () => {
+    const doc_type = docTypeSelect.value;
+    const doc_value = docValueInput.value.trim();
+    let custom_response;
+
+    if (!doc_value) return alert("Digite o número do documento");
+
+    try {
+        custom_response = JSON.parse(docResponseInput.value);
+    } catch (e) {
+        return alert("Erro no JSON de retorno: " + e.message);
+    }
+
+    addDocBtn.disabled = true;
+    try {
+        const res = await fetch(backendURL + "/api/documents", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ doc_type, doc_value, custom_response })
+        });
+        if (!res.ok) throw new Error("Erro ao salvar documento");
+        docValueInput.value = "";
+        fetchDocs();
+    } catch (err) {
+        alert(err.message);
+    } finally {
+        addDocBtn.disabled = false;
     }
 });
 
 webhookUrlEl.textContent = webhookEndpoint;
 fetchWebhooks();
 loadConfig();
+fetchDocs();
 setInterval(() => { if (document.hasFocus()) fetchWebhooks(); }, 5000);
